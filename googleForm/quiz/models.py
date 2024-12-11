@@ -40,4 +40,23 @@ class Form(BaseModel):
             self.code=generateRandomCode(8)
 
         super(Form,self).save(*args,**kwargs)    
-     
+
+
+class ResponseAnswer(BaseModel):
+    answer = models.CharField(max_length=100)
+    answer_to = models.ForeignKey(Question, on_delete=models.CASCADE, related_name="answer_to")
+
+    def __str__(self):
+        return self.answer
+
+
+class Responses(BaseModel):
+    code = models.CharField(max_length=100, unique=True, blank=True)
+    form = models.ForeignKey(Form, on_delete=models.CASCADE, related_name="forms")
+    responder_email = models.CharField(max_length=100, null=True, blank=True)
+    responses = models.ManyToManyField(ResponseAnswer)
+
+    def save(self, *args, **kwargs):
+        if not self.pk:
+            self.code = generateRandomCode(10)
+        super(Responses, self).save(*args, **kwargs)
