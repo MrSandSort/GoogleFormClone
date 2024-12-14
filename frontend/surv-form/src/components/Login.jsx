@@ -13,9 +13,6 @@ const LoginPage = () => {
 
   return (
     <div className="flex flex-col justify-center items-center min-h-screen bg-green-50">
-      <nav className="w-full bg-green-600 text-white p-4 text-center font-bold">
-        Navbar Component
-      </nav>
       <div className="flex-grow flex justify-center items-center mt-8 px-4">
         <div
           className="bg-white p-4 rounded-lg shadow-lg w-full max-w-3xl"
@@ -39,14 +36,6 @@ const LoginPage = () => {
               ]}
             >
               <Input placeholder="Enter your Employee ID" />
-            </Form.Item>
-
-            <Form.Item
-              label="Name"
-              name="name"
-              rules={[{ required: true, message: "Please input your Name!" }]}
-            >
-              <Input placeholder="Enter your Name" />
             </Form.Item>
 
             <Form.Item

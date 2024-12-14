@@ -1,7 +1,33 @@
 from django.db import models
-from .choices import QUESTION_CHOICES
-from django.contrib.auth.models import User
+from .choices import QUESTION_CHOICES, ROLE_CHOICES
+from django.contrib.auth.models import AbstractUser
 from .utils import generateRandomCode
+
+
+class CustomUser(AbstractUser):
+    employee_id= models.CharField(max_length=200, unique=True)
+    role= models.CharField(max_length=100, choices=ROLE_CHOICES, default='staff')
+
+
+    groups = models.ManyToManyField(
+        'auth.Group',
+        related_name='customuser_set',  
+        blank=True,
+        help_text='The groups this user belongs to.',
+        verbose_name='groups',
+    )
+    user_permissions = models.ManyToManyField(
+        'auth.Permission',
+        related_name='customuser_set', 
+        blank=True,
+        help_text='Specific permissions for this user.',
+        verbose_name='user permissions',
+    )
+
+
+    def __str__(self):
+        return f"{self.name} ({self.employee_id}) - {self.role}"
+
 
 class BaseModel(models.Model):
     created_at= models.DateField(auto_now_add=True)
@@ -28,7 +54,7 @@ class Question(BaseModel):
 class Form(BaseModel):
     code= models.CharField(max_length=100, unique=True, blank=True)
     title= models.CharField(max_length=100) 
-    creator= models.ForeignKey(User, on_delete=models.CASCADE)
+    creator= models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     background_color= models.CharField(max_length=100, default='blue')  
     questions= models.ManyToManyField(Question, related_name='questions')
 

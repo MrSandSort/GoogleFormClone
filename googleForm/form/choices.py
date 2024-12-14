@@ -4,3 +4,9 @@ QUESTION_CHOICES= (
     ("multiple choices","multiple choices"),
     ("checkbox","checkbox")
 )
+
+ROLE_CHOICES = [
+        ('admin', 'Admin'),
+        ('staff', 'Staff'),
+        ('supervisor', 'Supervisor'),
+    ]

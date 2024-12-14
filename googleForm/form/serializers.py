@@ -1,5 +1,32 @@
 from rest_framework import serializers
-from .models import Question, Choices, Form, Responses, ResponseAnswer
+from django.db import transaction
+from .models import Question, Choices, Form, Responses, ResponseAnswer, CustomUser
+
+
+
+class RegisterUserSerializer(serializers.ModelSerializer):
+    password= serializers.CharField(write_only=True,min_length=8 )
+    class Meta:
+        model= CustomUser
+        fields = ['employee_id', 'email', 'password', 'username','role']
+
+    def create_user(self, validated_data):
+        with transaction.atomic():
+
+            user= CustomUser.objects.create_user(
+            username= validated_data['username'],    
+            employee_id= validated_data['employee_id'],
+            email=validated_data['email'],
+            role=validated_data['role'],
+            )
+            user.set_password(validated_data['password'])
+            user.save()
+            return user  
+
+    def create(self, validated_data):
+        return self.create_user(validated_data)      
+
+
 
 class QuestionSerializer(serializers.ModelSerializer):
     class Meta:
@@ -26,7 +53,6 @@ class FormSerializer(serializers.ModelSerializer):
                 "question_type": question.question_type,
                 "required": question.required,
                 "choices":choices
-
             }) 
 
         data={
