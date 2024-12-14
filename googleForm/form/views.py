@@ -1,14 +1,23 @@
 from django.shortcuts import render
-from django.db import transaction
+from rest_framework_simplejwt.views import TokenObtainPairView
+from .serializers import LogInUserSerializer
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from .models import Question, Form, Responses, ResponseAnswer, Choices
+from .models import Question, Form, Responses, ResponseAnswer, Choices, CustomUser
 from .serializers import QuestionSerializer, FormSerializer, ResponseSerializer,FormResponseSerializers, RegisterUserSerializer
 
-
+class LogInView(TokenObtainPairView):
+    serializer_class= LogInUserSerializer
 
 class RegisterView(APIView):
+
+    def get(self,requesrt):
+        queryset= CustomUser.objects.all()
+        serializer= RegisterUserSerializer(queryset, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
     def post(self, request, *args, **kwargs):
         serializer = RegisterUserSerializer(data=request.data)
         if serializer.is_valid():
@@ -46,7 +55,6 @@ class FormResponsesAPI(APIView):
              "messages":"responses fetched successfully",
              "data":serializer.data })
     
-
 class StoreResponseAPI(APIView):
 
     def post(self,request):

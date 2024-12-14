@@ -1,8 +1,10 @@
 from rest_framework import serializers
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from django.db import transaction
+from django.contrib.auth import authenticate
+from django.contrib.auth.models import update_last_login
+from rest_framework.exceptions import AuthenticationFailed
 from .models import Question, Choices, Form, Responses, ResponseAnswer, CustomUser
-
-
 
 class RegisterUserSerializer(serializers.ModelSerializer):
     password= serializers.CharField(write_only=True,min_length=8 )
@@ -24,9 +26,39 @@ class RegisterUserSerializer(serializers.ModelSerializer):
             return user  
 
     def create(self, validated_data):
-        return self.create_user(validated_data)      
+        return self.create_user(validated_data)
 
+   
+class LogInUserSerializer(TokenObtainPairSerializer):    
+    employee_id = serializers.CharField()
+    password = serializers.CharField(write_only=True)
+    
+    def validate(self, attrs):
+        employee_id= attrs.get('employee_id')
+        password= attrs.get('password')
 
+        try:
+
+            user= CustomUser.objects.get(employee_id=employee_id)
+
+            if not user.check_password(password):
+                
+                raise AuthenticationFailed("Invalid password.")
+            
+            if not user.username:
+                raise AuthenticationFailed("Username is required.")
+
+            if not user.is_active:
+                raise AuthenticationFailed("This user is inactive.")
+        except:
+            raise AuthenticationFailed("User with this employee_id doesn't exist")
+
+        
+        data = super().validate(attrs)
+        update_last_login(None, user)
+
+        data["employee_id"] = user.employee_id
+        return data
 
 class QuestionSerializer(serializers.ModelSerializer):
     class Meta:
