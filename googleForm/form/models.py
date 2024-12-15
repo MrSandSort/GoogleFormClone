@@ -26,7 +26,7 @@ class CustomUser(AbstractUser):
 
 
     def __str__(self):
-        return f"{self.name} ({self.employee_id}) - {self.role}"
+        return f"{self.username} ({self.employee_id}) - {self.role}"
 
 
 class BaseModel(models.Model):

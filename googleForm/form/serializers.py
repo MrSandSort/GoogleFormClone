@@ -27,8 +27,7 @@ class RegisterUserSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         return self.create_user(validated_data)
-
-   
+  
 class LogInUserSerializer(TokenObtainPairSerializer):    
     employee_id = serializers.CharField()
     password = serializers.CharField(write_only=True)
@@ -60,16 +59,47 @@ class LogInUserSerializer(TokenObtainPairSerializer):
         data["employee_id"] = user.employee_id
         return data
 
-class QuestionSerializer(serializers.ModelSerializer):
+class ChoiceSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Choices
+        fields = ["id", "choice"]
+class QuestionSerializer(serializers.ModelSerializer): 
     class Meta:
         model = Question
         exclude=["created_at","updated_at"]
 
 class FormSerializer(serializers.ModelSerializer):
+
+    questions = QuestionSerializer(many=True)
     class Meta:
         model = Form
         exclude=["created_at","updated_at","creator","id"]
+        def create(self, validated_data):
+            user = self.context.get('request').user
+            validated_data['creator'] = user
+            questions_data = validated_data.pop('questions', [])
 
+            try:
+                with transaction.atomic():
+                    form = Form.objects.create(**validated_data)
+
+                    for question_data in questions_data:
+                        choices_data = question_data.pop('choices', [])
+                        question = Question.objects.create(**question_data)
+
+                        for choice_data in choices_data:
+                            choice = Choices.objects.create(**choice_data)
+                            question.choices.add(choice)
+
+                        form.questions.add(question)
+
+                    return form 
+            except Exception as e:
+                raise serializers.ValidationError({"error": str(e)})
+
+
+
+            
     def to_representation(self, instance):
         questions=[]
         for question in instance.questions.all():
@@ -96,7 +126,7 @@ class FormSerializer(serializers.ModelSerializer):
         }          
         
         return data 
-
+    
 
 class ResponseAnswerSerializer(serializers.ModelSerializer):
     class Meta:
@@ -144,4 +174,5 @@ class FormResponseSerializers(serializers.ModelSerializer):
             "responses": ResponseSerializer(instance, many=True).data
         }
         return data    
+
 

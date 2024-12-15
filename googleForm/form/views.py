@@ -3,6 +3,8 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 from .serializers import LogInUserSerializer
 from rest_framework import status
 from rest_framework.views import APIView
+from rest_framework.permissions import IsAuthenticated
+from django.db import transaction
 from rest_framework.response import Response
 from .models import Question, Form, Responses, ResponseAnswer, Choices, CustomUser
 from .serializers import QuestionSerializer, FormSerializer, ResponseSerializer,FormResponseSerializers, RegisterUserSerializer
@@ -35,6 +37,22 @@ class QuestionAPI(APIView):
        serializers= QuestionSerializer(queryset, many=True)
        return Response({"status":True, "messages":"Questions fetched successfully","data":serializers.data })
       
+class FormViewAPI(APIView):
+
+    permission_classes=[IsAuthenticated]
+
+    def get(self,request):
+        queryset= Form.objects.all()
+        serializer= FormSerializer(queryset, many=True)
+        return Response({"status":True, "messages":"Forms fetched successfully","data":serializer.data}, status=status.HTTP_200_OK)
+    
+    def post(self, request):
+        serializer = FormSerializer(data=request.data, context={'request': request})
+        if serializer.is_valid():
+            form= serializer.save()
+            return Response({"status":True, "messages":"Form created successfully","data":FormSerializer(form).data}, status=status.HTTP_201_CREATED)
+        return Response({"errors":serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+
 class FormAPI(APIView):
 
     def get(self,request, pk):
@@ -44,6 +62,7 @@ class FormAPI(APIView):
             {"status":True, 
              "messages":"Questions fetched successfully",
              "data":serializer.data })
+    
     
 class FormResponsesAPI(APIView):
 
