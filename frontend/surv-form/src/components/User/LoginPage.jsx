@@ -1,10 +1,49 @@
 import React from "react";
 import { Form, Input, Button } from "antd";
 import "tailwindcss/tailwind.css";
+import Swal from "sweetalert2";
+import API from "../../utils/api";
+import { useNavigate } from "react-router-dom";
 
 const LoginPage = () => {
-  const onFinish = (values) => {
-    console.log("Success:", values);
+
+  const navigate= useNavigate();
+
+  const onFinish = async (values) => {
+    try {
+      const response = await API.post("api/login/", {
+        username: values.username,
+        employee_id: values.employee_id,
+        password: values.password,
+      });
+
+      console.log("Login successful:", response.data);
+      const token= response.data.access
+      console.log(token)
+      if(token){
+        localStorage.setItem('authToken', token)
+      }
+
+      Swal.fire({
+        title: "Success!",
+        text: "Login successful!",
+        icon: "success",
+        confirmButtonText: "OK",
+      });
+      navigate('/dashboard')
+
+  
+
+    } catch (error) {
+      console.error("Login failed:", error);
+
+      Swal.fire({
+        title: "Error!",
+        text: "Login failed. Please check your credentials and try again.",
+        icon: "error",
+        confirmButtonText: "OK",
+      });
+    }
   };
 
   const onFinishFailed = (errorInfo) => {
@@ -31,19 +70,23 @@ const LoginPage = () => {
             <Form.Item
               label="Employee ID"
               name="employee_id"
-              rules={[
-                { required: true, message: "Please input your Employee ID!" },
-              ]}
+              rules={[{ required: true, message: "Please input your Employee ID!" }]}
             >
               <Input placeholder="Enter your Employee ID" />
             </Form.Item>
 
             <Form.Item
+              label="Username"
+              name="username"
+              rules={[{ required: true, message: "Enter your username" }]}
+            >
+              <Input placeholder="Enter your username" />
+            </Form.Item>
+
+            <Form.Item
               label="Password"
               name="password"
-              rules={[
-                { required: true, message: "Please input your Password!" },
-              ]}
+              rules={[{ required: true, message: "Please input your Password!" }]}
             >
               <Input.Password placeholder="Enter your Password" />
             </Form.Item>

@@ -55,9 +55,11 @@ class FormViewAPI(APIView):
 
 class FormAPI(APIView):
 
+    permission_classes= [IsAuthenticated]
+
     def get(self,request, pk):
         queryset= Form.objects.get(code=pk)
-        serializer= FormSerializer(queryset)
+        serializer= FormSerializer(queryset,context={'request':request})
         return Response(
             {"status":True, 
              "messages":"Questions fetched successfully",
@@ -78,15 +80,17 @@ class StoreResponseAPI(APIView):
 
     def post(self,request):
         data= request.data 
+        form_code= data.get('form_code')
+        responses= data.get('responses')
+        form= Form.objects.get(code= form_code)
 
         with transaction.atomic():
-            if data.get('form_code') is None or data.get('responses') is None:
+            if form_code is None or responses is None:
                 return Response({
                 "status": False,
                 "message":"Form_code and responses are required."
             })  
-            responses= data.get('responses')
-            response_obj= Responses.objects.create(form= Form.objects.get(code= data.get('form_code')))
+            response_obj= Responses.objects.create(form= form)
 
             for response in responses:
                 question= Question.objects.get(code= response['question_id'])
@@ -104,7 +108,7 @@ class StoreResponseAPI(APIView):
                             answer_to= question
                         )
 
-                    response_obj.responses.add(response_obj)
+                    response_obj.responses.add(answer_obj)
 
             return Response({
                 "status": True,

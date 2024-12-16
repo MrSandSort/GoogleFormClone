@@ -1,5 +1,5 @@
 import React from 'react'
-import LoginPage from '../components/Login'
+import LoginPage from '../components/User/LoginPage'
 import Navbar from '../components/NavigationBar/Navbar'
 
 export default function Login() {
