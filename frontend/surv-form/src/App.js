@@ -5,6 +5,7 @@ import Login from './pages/Login';
 import Home from './pages/Home';
 import SurveyPage from './pages/surveyPage';
 import Register from './pages/Register';
+import Question from './pages/Question';
 
 
 
@@ -15,6 +16,7 @@ function App() {
       <Route path='/' element={<Home/>} ></Route>
       <Route path='addUser' element={<Register/>}></Route>
       <Route path='login' element={<Login/>}></Route>
+      <Route path='questions' element={<Question/>}></Route>
       <Route path='survey' element={<SurveyPage/>}></Route>
       <Route path='dashboard' element={<Dashboard/>}></Route>
     </Routes>

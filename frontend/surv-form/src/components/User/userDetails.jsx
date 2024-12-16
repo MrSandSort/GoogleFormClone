@@ -9,8 +9,8 @@ import {
   CategoryScale,
   LinearScale,
 } from "chart.js";
-import axios from "axios";
 import { Input, Table, Spin, Card } from "antd";
+import API from "../../utils/api";
 
 ChartJS.register(Title, Tooltip, Legend, ArcElement, CategoryScale, LinearScale);
 
@@ -24,7 +24,7 @@ const UserDashboard = () => {
 
   const fetchUsers = async () => {
     try {
-      const response = await axios.get("http://127.0.0.1:8000/api/addUser/");
+      const response = await API.get("api/addUser/");
       setUsers(response.data);
       setFilteredUsers(response.data);
       setLoading(false);

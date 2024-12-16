@@ -66,7 +66,27 @@ class ChoiceSerializer(serializers.ModelSerializer):
 class QuestionSerializer(serializers.ModelSerializer): 
     class Meta:
         model = Question
-        exclude=["created_at","updated_at"]
+        exclude=["updated_at"]
+
+
+    def to_representation(self, instance):
+        if instance.question_type in['long answer','short answer']:
+            data={
+            "id":instance.id,
+            "question":instance.question,
+            "created_at": instance.created_at,
+            "question_type": instance.question_type,
+        }
+        else:
+            data={
+            "id":instance.id,
+            "question":instance.question,
+            "created_at": instance.created_at,
+            "question_type": instance.question_type,
+            "choices":ChoiceSerializer(instance.choices.all(),many=True).data
+        }
+        
+        return data    
 
 class FormSerializer(serializers.ModelSerializer):
 
