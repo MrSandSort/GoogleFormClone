@@ -60,6 +60,7 @@ class LogInUserSerializer(TokenObtainPairSerializer):
         return data
 
 class ChoiceSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = Choices
         fields = ["id", "choice"]
