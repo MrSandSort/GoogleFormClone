@@ -33,83 +33,65 @@ A feature-rich web application built using **Django** for the backend and **Reac
 
 
 Directory structure:
-└── MrSandSort-GoogleFormClone/
-    ├── frontend/
-    │   └── surv-form/
-    │       ├── .gitignore
-    │       ├── public/
-    │       │   ├── manifest.json
-    │       │   ├── index.html
-    │       │   └── robots.txt
-    │       ├── package.json
-    │       ├── package-lock.json
-    │       ├── README.md
-    │       ├── tailwind.config.js
-    │       └── src/
-    │           ├── setupTests.js
-    │           ├── index.css
-    │           ├── assets/
-    │           ├── components/
-    │           │   ├── survey/
-    │           │   │   ├── re-sampled.jsx
-    │           │   │   └── surveySample.jsx
-    │           │   ├── User/
-    │           │   │   ├── LoginPage.jsx
-    │           │   │   ├── RegisterPage.jsx
-    │           │   │   └── userDetails.jsx
-    │           │   ├── Questions/
-    │           │   │   └── QuestionModal.jsx
-    │           │   └── NavigationBar/
-    │           │       └── Navbar.jsx
-    │           ├── App.js
-    │           ├── reportWebVitals.js
-    │           ├── pages/
-    │           │   ├── Register.jsx
-    │           │   ├── Login.jsx
-    │           │   ├── Home.jsx
-    │           │   ├── ProtectedRoute.jsx
-    │           │   ├── surveyPage.jsx
-    │           │   ├── Question.jsx
-    │           │   └── Dashboard.jsx
-    │           ├── App.css
-    │           ├── App.test.js
-    │           ├── index.js
-    │           └── utils/
-    │               ├── generatePdf.jsx
-    │               └── api.jsx
-    ├── googleForm/
-    │   ├── api/
-    │   │   ├── __init__.py
-    │   │   ├── urls.py
-    │   │   └── __pycache__/
-    │   ├── manage.py
-    │   ├── db.sqlite3
-    │   ├── googleForm/
-    │   │   ├── settings.py
-    │   │   ├── __init__.py
-    │   │   ├── urls.py
-    │   │   ├── __pycache__/
-    │   │   ├── asgi.py
-    │   │   └── wsgi.py
-    │   ├── package-lock.json
-    │   └── form/
-    │       ├── serializers.py
-    │       ├── models.py
-    │       ├── __init__.py
-    │       ├── tests.py
-    │       ├── __pycache__/
-    │       ├── apps.py
-    │       ├── migrations/
-    │       │   ├── __init__.py
-    │       │   ├── __pycache__/
-    │       │   ├── 0002_customuser_role.py
-    │       │   ├── 0003_remove_customuser_name.py
-    │       │   └── 0001_initial.py
-    │       ├── choices.py
-    │       ├── admin.py
-    │       ├── views.py
-    │       └── utils.py
-    └── README.md
+MrSandSort-GoogleFormClone/
+├── frontend/
+│   └── surv-form/
+│       ├── public/
+│       │   ├── index.html
+│       │   ├── manifest.json
+│       │   └── robots.txt
+│       ├── src/
+│       │   ├── assets/
+│       │   ├── components/
+│       │   │   ├── NavigationBar/
+│       │   │   │   └── Navbar.jsx
+│       │   │   ├── Questions/
+│       │   │   │   └── QuestionModal.jsx
+│       │   │   ├── survey/
+│       │   │   │   ├── re-sampled.jsx
+│       │   │   │   └── surveySample.jsx
+│       │   │   └── User/
+│       │   │       ├── LoginPage.jsx
+│       │   │       ├── RegisterPage.jsx
+│       │   │       └── userDetails.jsx
+│       │   ├── pages/
+│       │   │   ├── Dashboard.jsx
+│       │   │   ├── Home.jsx
+│       │   │   ├── Login.jsx
+│       │   │   ├── ProtectedRoute.jsx
+│       │   │   ├── Question.jsx
+│       │   │   ├── Register.jsx
+│       │   │   └── surveyPage.jsx
+│       │   ├── utils/
+│       │   │   ├── api.jsx
+│       │   │   └── generatePdf.jsx
+│       │   ├── App.js
+│       │   ├── index.js
+│       │   └── index.css
+│       ├── package.json
+│       └── tailwind.config.js
+│
+├── googleForm/
+│   ├── api/
+│   │   └── urls.py
+│   ├── form/
+│   │   ├── admin.py
+│   │   ├── apps.py
+│   │   ├── choices.py
+│   │   ├── models.py
+│   │   ├── serializers.py
+│   │   ├── utils.py
+│   │   └── views.py
+│   ├── googleForm/
+│   │   ├── settings.py
+│   │   ├── urls.py
+│   │   ├── asgi.py
+│   │   └── wsgi.py
+│   ├── manage.py
+│   └── db.sqlite3
+│
+└── README.md
+
 
 
 Ensure you have the following installed on your system:
